@@ -2,9 +2,27 @@ const http = require('http');
 const express = require('express');
 const {logger} = require('morgan');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 // mongo connection
-const mongoConnection = require("../config/index");
+mongoose.connect("mongodb+srv://swethaHirge:eNbiwvH7LUDppBrx@cluster0.0xins.mongodb.net/groupXDatabase?retryWrites=true&w=majority", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+
+mongoose.connection.on('connected', () => {
+  console.log('Mongo has connected succesfully')
+})
+mongoose.connection.on('reconnected', () => {
+  console.log('Mongo has reconnected')
+})
+mongoose.connection.on('error', error => {
+  console.log('Mongo connection has an error', error)
+  mongoose.disconnect()
+})
+mongoose.connection.on('disconnected', () => {
+  console.log('Mongo connection is disconnected')
+})
 
 //routes
 const indexRouter = require("../routes/index");

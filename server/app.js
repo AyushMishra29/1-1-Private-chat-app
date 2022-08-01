@@ -1,11 +1,12 @@
 const http = require('http');
 const express = require('express');
-const {logger} = require('morgan');
-const cors = require('cors');
 const mongoose = require('mongoose');
+const socketio = require('socket.io');
+const WebSockets = require('../utils/WebSockets');
+
 
 // mongo connection
-mongoose.connect("mongodb+srv://swethaHirge:eNbiwvH7LUDppBrx@cluster0.0xins.mongodb.net/groupXDatabase?retryWrites=true&w=majority", {
+mongoose.connect("mongodb+srv://swethaHirge:eNbiwvH7LUDppBrx@cluster0.0xins.mongodb.net/Ayush2908?retryWrites=true&w=majority", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -48,18 +49,14 @@ app.use("/users", userRouter);
 app.use("/room", decode, chatRoomRouter);
 app.use("/delete", deleteRouter);
 
-/** catch 404 and forward to error handler */
-app.use('*', (req, res) => {
-  return res.status(404).json({
-    success: false,
-    message: 'API endpoint doesnt exist'
-  })
-});
-
 /** Create HTTP server. */
 const server = http.createServer(app);
-
+/** Create socket connection 
+let globalio = socketio.listen(server);
+globalio.on('connection', WebSockets.connection)
+ Listen on provided port, on all network interfaces. */
+server.listen(port);
 /** Event listener for HTTP server "listening" event. */
-server.listen(port , () => {
+server.on("listening", () => {
   console.log(`Listening on port:: http://localhost:${port}/`)
 });
